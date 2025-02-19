@@ -1,0 +1,34 @@
+﻿@model List<GUIDE.Models.StudentModel>
+@{
+    ViewData["Title"] = "Student List";
+}
+
+<h2>Student List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Photo</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@student.PhotoUrl" alt="Student Photo" width="80" height="80" style="border-radius:50%;" />
+                </td>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
