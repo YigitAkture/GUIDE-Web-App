@@ -13,7 +13,7 @@ namespace GUIDE.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClient _httpClient;
-        private readonly string pythonApiUrl = "http://127.0.0.1:5000";
+        private readonly string pythonApiUrl = "http://127.0.0.1:5000/";
 
         public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, HttpClient httpClient)
         {
@@ -72,10 +72,37 @@ namespace GUIDE.Controllers
         public async Task<IActionResult> StudentList()
         {
             var response = await _httpClient.GetAsync($"{pythonApiUrl}/get_students");
+            if (!response.IsSuccessStatusCode)
+            {
+                // Handle error
+                return View(new List<StudentModel>());
+            }
+
             var jsonString = await response.Content.ReadAsStringAsync();
             var students = JsonConvert.DeserializeObject<List<StudentModel>>(jsonString);
 
+            // Convert image paths to Base64
+            foreach (var student in students)
+            {
+                student.PhotoBase64 = ConvertImageToBase64(student.PhotoUrl);
+            }
+
             return View(students);
+        }
+
+        private string ConvertImageToBase64(string imagePath)
+        {
+            try
+            {
+                byte[] imageBytes = System.IO.File.ReadAllBytes(imagePath);
+                return Convert.ToBase64String(imageBytes);
+            }
+            catch (Exception ex)
+            {
+                // Log error and return an empty string if conversion fails
+                Console.WriteLine($"Error converting image: {ex.Message}");
+                return string.Empty;
+            }
         }
 
     }

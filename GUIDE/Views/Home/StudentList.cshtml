@@ -18,10 +18,10 @@
         {
             <tr>
                 <td>
-                    <img src="@student.PhotoUrl" alt="Student Photo" width="80" height="80" style="border-radius:50%;" />
+                    <img src="data:image/png;base64,@student.PhotoBase64" alt="@student.FirstName @student.LastName" width="80" height="80" style="border-radius:50%;">
                 </td>
-                <td>@student.FirstName</td>
-                <td>@student.LastName</td>
+                <td class="align-content-center">@student.FirstName</td>
+                <td class="align-content-center">@student.LastName</td>
             </tr>
         }
     </tbody>
