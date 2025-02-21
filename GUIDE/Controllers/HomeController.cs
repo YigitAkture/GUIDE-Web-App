@@ -33,8 +33,9 @@ namespace GUIDE.Controllers
             var response = await httpClient.GetAsync($"{pythonApiUrl}/take_attendance");
             var result = await response.Content.ReadAsStringAsync();
             ViewBag.Message = result;
-            return View("Index");  // Ana sayfaya dön
+            return View("Index");
         }
+
 
         public async Task<IActionResult> AttendanceList()
         {
@@ -55,14 +56,15 @@ namespace GUIDE.Controllers
                 foreach (var line in lines.Skip(1)) // İlk satır başlık olduğu için atla
                 {
                     var columns = line.Split(",");
-                    if (columns.Length == 3)
+                    if (columns.Length == 4)
                     {
                         var name = columns[0].Split("_");
                         attendanceList.Add(new AttendanceModel
                         {
                             Name = name[0] + " " + name[1],
                             Date = columns[1],
-                            Time = columns[2]
+                            Time = columns[2],
+                            Emotion = columns[3]
                         });
                     }
                 }
