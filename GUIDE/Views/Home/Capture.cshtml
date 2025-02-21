@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Capture";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture Photo</title>
+</head>
+<body>
+    <h1>Capture Photo</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="capture">Take Photo</button>
+    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+    <img id="photo" style="display: none;">
+    <button id="upload" style="display: none;">Save Photo</button>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const photo = document.getElementById('photo');
+        const captureButton = document.getElementById('capture');
+        const uploadButton = document.getElementById('upload');
+
+        // Open camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error("Error accessing camera: ", err);
+            });
+
+        // Capture photo
+        captureButton.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, 640, 480);
+            const imageData = canvas.toDataURL('image/png');
+            photo.src = imageData;
+            photo.style.display = 'block';
+            uploadButton.style.display = 'block';
+        });
+
+        // Upload photo
+        uploadButton.addEventListener('click', async () => {
+            const firstName = prompt("Enter first name:");
+            const lastName = prompt("Enter last name:");
+
+            if (!firstName || !lastName) {
+                alert("First name and last name are required!");
+                return;
+            }
+
+            const filename = `${firstName}_${lastName}.png`;
+            const imageData = photo.src.replace(/^data:image\/(png|jpg);base64,/, '');
+
+            const response = await fetch('/Home/SaveCapturedPhoto', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image: imageData, filename })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        });
+    </script>
+</body>
+</html>
+

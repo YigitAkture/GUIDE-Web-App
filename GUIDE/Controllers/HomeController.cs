@@ -14,6 +14,7 @@ namespace GUIDE.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClient _httpClient;
         private readonly string pythonApiUrl = "http://127.0.0.1:5000/";
+        private readonly string savePath = @"C:\Users\Yigit\Desktop\Maltepe\Mentor\Face-Recognition-Attendance-System\faces";
 
         public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, HttpClient httpClient)
         {
@@ -107,5 +108,40 @@ namespace GUIDE.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SaveCapturedPhoto([FromBody] ImageUploadModel model)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(model.Image) || string.IsNullOrEmpty(model.FileName))
+                    return BadRequest(new { message = "Invalid image data or filename." });
+
+                // Save the image
+                byte[] imageBytes = Convert.FromBase64String(model.Image);
+                string filePath = Path.Combine(savePath, model.FileName);
+                await System.IO.File.WriteAllBytesAsync(filePath, imageBytes);
+
+                // Call the Flask API to run encode_faces.py
+                var httpClient = _httpClientFactory.CreateClient();
+                var response = await httpClient.GetAsync($"{pythonApiUrl}/encode_faces");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorMsg = await response.Content.ReadAsStringAsync();
+                    return StatusCode(500, new { message = "Error encoding faces", error = errorMsg });
+                }
+
+                return Ok(new { message = $"Photo saved for {model.FileName}!", filePath });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Error saving photo: {ex.Message}" });
+            }
+        }
+
+        public IActionResult Capture()
+        {
+            return View();
+        }
     }
 }
