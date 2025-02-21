@@ -14,7 +14,7 @@ namespace GUIDE.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClient _httpClient;
         private readonly string pythonApiUrl = "http://127.0.0.1:5000/";
-        private readonly string savePath = @"C:\Users\Yigit\Desktop\Maltepe\Mentor\Face-Recognition-Attendance-System\faces";
+        private readonly string savePath = @".\FRAS\faces";
 
         public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, HttpClient httpClient)
         {
