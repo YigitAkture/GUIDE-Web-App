@@ -143,5 +143,10 @@ namespace GUIDE.Controllers
         {
             return View();
         }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
     }
 }

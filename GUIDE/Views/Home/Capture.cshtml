@@ -11,11 +11,17 @@
 </head>
 <body>
     <h1>Capture Photo</h1>
-    <video id="video" width="640" height="480" autoplay></video>
-    <button id="capture">Take Photo</button>
-    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
-    <img id="photo" style="display: none;">
-    <button id="upload" style="display: none;">Save Photo</button>
+    <div class="d-flex justify-content-around">
+        <div>
+            <video id="video" width="640" height="480" autoplay></video>
+            <button id="capture" class="btn-info rounded mx-4 mt-2">Take Photo</button>
+            <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+        </div>
+        <div class="mx-4">
+            <img id="photo" style="display: none;">
+            <button id="upload" style="display: none;" class="btn-success rounded mx-4 mt-3">Save Photo</button>
+        </div>
+    </div>
 
     <script>
         const video = document.getElementById('video');
