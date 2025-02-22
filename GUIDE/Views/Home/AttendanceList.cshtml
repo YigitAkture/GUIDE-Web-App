@@ -1,6 +1,7 @@
 ﻿@model List<GUIDE.Models.AttendanceModel>
 @{
     ViewData["Title"] = "Attendance List";
+    int i = 0;
 }
 
 <h2>Attendance Report</h2>
@@ -8,6 +9,7 @@
 <table class="table table-bordered text-light">
     <thead>
         <tr>
+            <th class ="text-center">#</th>
             <th>Name</th>
             <th>Date</th>
             <th>Time</th>
@@ -17,7 +19,9 @@
     <tbody>
         @foreach (var record in Model)
         {
+            i++;
             <tr>
+                <td class="text-center">@i</td>
                 <td>@record.Name</td>
                 <td>@record.Date</td>
                 <td>@record.Time</td>

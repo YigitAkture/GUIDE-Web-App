@@ -102,14 +102,14 @@ while True:
         cv2.putText(frame, f"{name} ({emotion})", (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 
     # Display the frame
-    cv2.imshow('Face Recognition & Emotion Analysis', frame)
+    cv2.imshow('GUIDE', frame)
 
     # Check for exit condition
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
     # Check if the window is still open before checking properties
-    if cv2.getWindowProperty('Face Recognition & Emotion Analysis', cv2.WND_PROP_VISIBLE) < 1:
+    if cv2.getWindowProperty('GUIDE', cv2.WND_PROP_VISIBLE) < 1:
         break
 
 # Release resources
